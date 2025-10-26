@@ -1,4 +1,4 @@
-# Специальная часть моего дипломной работы.
+# Специальная часть моей дипломной работы.
 
 ### Описание
 
@@ -7,7 +7,7 @@
 Клонируйте репозиторий.
 Создайте и активируйте виртуальное окружение:
 ```
-python3 -m venv venv
+python -m venv venv
 ```
 ```
 source venv/Source/activate
@@ -22,12 +22,12 @@ pip install -r requirements.txt
 
 ### Запуск проекта
 Можно менять только данные параметры в main.py:
-GNSS_SYSTEM
-NUMBER_SATELLITES
-MEASUREMENT_FILE
-NAVIGATION_FILE_GPS
-NAVIGATION_FILE_GLONASS
-TIME_POINT_MEASUREMENT
-TIME_FINAL
+- GNSS_SYSTEM
+- NUMBER_SATELLITES
+- MEASUREMENT_FILE
+- NAVIGATION_FILE_GPS
+- NAVIGATION_FILE_GLONASS
+- TIME_POINT_MEASUREMENT
+- TIME_FINAL
 
 Запускайте исполняемый скрипт main.py и проект запустится
