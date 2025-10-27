@@ -5,11 +5,11 @@ from navigation_processor import NavigationProcessor
 
 
 GNSS_SYSTEM = 'G'
-NUMBER_SATELLITES = 3
+NUMBER_SATELLITES = 4
 MEASUREMENT_FILE = 'data/zim20430.25o'
 NAVIGATION_FILE_GPS = 'data/zim20430.25n'
 NAVIGATION_FILE_GLONASS = 'data/zim20430.25g'
-TIME_POINT_MEASUREMENT = datetime(2025, 2, 12, 12, 50, 00)
+TIME_POINT_MEASUREMENT = datetime(2025, 2, 12, 12, 28, 00)
 TIME_FINAL = datetime(2025, 2, 12, 13, 50, 00)
 TIME_STEP = 30
 
@@ -41,8 +41,7 @@ navigation_task = NavigationProcessor(
 # Конкретный пример
 delta_xyz = (
     navigation_task.run(
-        [TIME_POINT_MEASUREMENT,
-         TIME_POINT_MEASUREMENT + timedelta(seconds=TIME_STEP*2)],
+        [TIME_POINT_MEASUREMENT],
         NUMBER_SATELLITES)
 )
 print([TIME_POINT_MEASUREMENT])

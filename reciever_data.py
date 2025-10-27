@@ -9,7 +9,7 @@ class RecieverLocation:
     def solve_navigation(
             self, satellites_data_list, max_iterations=100, tolerance=1e-6
     ):
-        """"Решение навигаицонной задачи при 2 и болле спутников"""
+        """"Решение навигаицонной задачи при 2 и более спутников"""
         system_multiplier = -1 if self.target_system == 'G' else 1
         c = 299792458.0
         omega_3 = 7.2921151467e-5
@@ -27,10 +27,11 @@ class RecieverLocation:
 
             for i, satellites_data in enumerate(satellites_data_list):
 
-                for sat_data in satellites_data:
+                for _, sat_data in satellites_data.items():
                     x_sat, y_sat, z_sat, clock_bias_sat, pseudorange = sat_data
 
                     if PR == 1:
+                        print('Пошел!')
                         dx = x_s - x_sat
                         dy = y_s - y_sat
                         dz = z_s - z_sat
@@ -58,14 +59,14 @@ class RecieverLocation:
                     )
 
                     Xi_s.append(xi_j)
-                    H_s_row = [h_x, h_y, h_z] + [0] * M
+                    H_s_row = [h_x, h_y, h_z] + [0.0] * M
                     H_s_row[3 + i] = 1.0
                     H_s.append(H_s_row)
 
             Xi_s = np.array(Xi_s)
             H_s = np.array(H_s)
-            # print(Xi_s)
-            # print(H_s)
+            print(Xi_s)
+            print(H_s)
 
             try:
                 if len(satellites_data_list[0]) == 4:
@@ -76,6 +77,7 @@ class RecieverLocation:
                 print('Ошибка, возможно вырожденная матрица!')
                 return None
 
+            print('Поправки равны', delta_theta_s)
             x_s += delta_theta_s[0]
             y_s += delta_theta_s[1]
             z_s += delta_theta_s[2]
@@ -85,8 +87,8 @@ class RecieverLocation:
             if PR == 1:
                 PDOP = np.linalg.inv((H_s.T @ H_s))
                 print('PDOP равен', np.sqrt(np.sum(np.diag(PDOP)[:3])))
-                # print(float(x_s), float(y_s), float(z_s),
-                #       [float(x) / c for x in delta_I_list])
+                print(float(x_s), float(y_s), float(z_s),
+                      [float(x) / c for x in delta_I_list])
                 return (float(x_s), float(y_s), float(z_s),
                         [float(x) for x in delta_I_list])
 

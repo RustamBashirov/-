@@ -56,7 +56,7 @@ class NavigationProcessor:
                     elevation_angle = calculate_elevation_angle(
                         x_0, y_0, z_0, x_sat, y_sat, z_sat
                     )
-                    if elevation_angle > 50:
+                    if elevation_angle > 30:
                         print('Время эфемерид', nearest_nodal_point_time,
                               'Номер спутника', satellite,
                               'Угол места', elevation_angle,
