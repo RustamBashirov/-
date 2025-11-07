@@ -32,9 +32,7 @@ class FilesManager:
             return approx_position, leap_seconds
 
     def read_measurement_file(self, target_time, leap_seconds):
-        target_time_str = (
-            target_time.strftime('%y%m%d%H%M') + f'{target_time.second}'
-        )
+        # print(target_time_str)
         satellites_data = []
         current_satellites = []
 
@@ -44,8 +42,22 @@ class FilesManager:
                     break
 
             for line in file:
-                if line[:18].replace(" ", "") == target_time_str:
+                if not line[:2].strip():
+                    continue
 
+                year, month, day, hour, minute, second = (
+                    line[:18].strip().split()[:6]
+                )
+                dt = datetime(
+                    year=int("20" + year),
+                    month=int(month),
+                    day=int(day),
+                    hour=int(hour),
+                    minute=int(minute),
+                    second=int(second)
+                )
+                if dt == target_time:
+                    print('Время из файла измерения', dt)
                     num_satellites_target_time = int(line[30:32])
                     sat_list_str = line[32:].strip()
                     file_iter = iter(file)
@@ -55,6 +67,7 @@ class FilesManager:
                         [sat_list_str[i:i+3]
                          for i in range(0, num_satellites_target_time * 3, 3)]
                     )
+                    print(current_satellites)
 
                     if self.target_system == 'R':
                         target_time -= timedelta(seconds=leap_seconds)
@@ -77,7 +90,7 @@ class FilesManager:
                             else:
                                 print('Отсутствует значение параметра '
                                       'псевдодальности для данного спутника')
-                        for _ in range(4):
+                        for _ in range(2):
                             next(file)
                     break
 

@@ -1,6 +1,7 @@
 import math
 
 import numpy as np
+from decimal import Decimal, ROUND_HALF_UP
 
 from additional_functions import glonass_day_seconds
 
@@ -10,6 +11,11 @@ class SatelliteLocation:
 
     def __init__(self, target_system):
         self.target_system = target_system
+
+    def _round_to_three_decimal(self, value):
+        """Вспомогательный метод для округления до 12 знаков после запятой"""
+        return float(Decimal(str(value)).quantize(Decimal('0.0000000000001'),
+                     rounding=ROUND_HALF_UP))
 
     def satellite_location_determination(self, satellite_data):
         """Выбор системы ГНСС"""
@@ -113,7 +119,13 @@ class SatelliteLocation:
         Y_svk = r_k * (cos_U_k * sin_Omega_k + sin_U_k * cos_Omega_k * cos_i_k)
         Z_svk = r_k * sin_U_k * sin_i_k
 
-        return X_svk, Y_svk, Z_svk, delta_T, pseudorange
+        return (
+            self._round_to_three_decimal(X_svk),
+            self._round_to_three_decimal(Y_svk),
+            self._round_to_three_decimal(Z_svk),
+            self._round_to_three_decimal(delta_T),
+            pseudorange
+        )
 
     def glonass_calculate_satellite_position(
             self, ephemeris_data, pseudorange, T_n

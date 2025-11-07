@@ -1,5 +1,4 @@
 from random import randrange
-import math
 
 from file_managers import FilesManager
 from satellite_data import SatelliteLocation
@@ -29,12 +28,12 @@ class NavigationProcessor:
                     target_time, self.leap_seconds
                 )
             )
+            print(all_observations)
             print('Время формирования измерения', measurement_time_system)
             available_observations = all_observations.copy()
             satellites_data_receiver_target_time = {}
             while (len(satellites_data_receiver_target_time)
-                   < number_satellites
-                   and available_observations):
+                   < number_satellites and available_observations):
                 random_index = randrange(len(available_observations))
                 satellite, pseudorange, T_pr = (
                     available_observations.pop(random_index)
@@ -56,11 +55,18 @@ class NavigationProcessor:
                     elevation_angle = calculate_elevation_angle(
                         x_0, y_0, z_0, x_sat, y_sat, z_sat
                     )
-                    if elevation_angle > 30:
-                        print('Время эфемерид', nearest_nodal_point_time,
-                              'Номер спутника', satellite,
-                              'Угол места', elevation_angle,
-                              'Координаты спутника', (x_sat, y_sat, z_sat))
+                    print(satellite, elevation_angle)
+                    if elevation_angle > 60.0:
+                        # print('Время эфемерид', nearest_nodal_point_time)
+                        # print(data)
+                        print(
+                            'Время эфемерид', nearest_nodal_point_time,
+                            'Номер спутника', satellite,
+                            'Угол места', elevation_angle,
+                            'Координаты спутника', (x_sat, y_sat, z_sat,
+                                                    delta_T_sat, pseudorange)
+                        )
+                        print('------------------------------------------'*5)
                         satellites_data_receiver_target_time[satellite] = (
                             x_sat, y_sat, z_sat, delta_T_sat, pseudorange
                         )
@@ -71,6 +77,7 @@ class NavigationProcessor:
             satellites_data_receiver.append(
                 satellites_data_receiver_target_time
             )
+            print('-------------------------------------------------'*10)
 
         recieve_xyz = (self.reciever_location.
                        solve_navigation(satellites_data_receiver))
