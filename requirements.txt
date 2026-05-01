@@ -3,3 +3,5 @@ charset-normalizer==3.3.2
 idna==3.7
 requests==2.32.3
 urllib3==2.2.2
+aiohttp==3.9.5
+aiofiles==23.2.1
